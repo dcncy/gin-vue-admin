@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/aws/aws-sdk-go v1.44.307
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/casbin/casbin/v2 v2.71.1
 	github.com/casbin/gorm-adapter/v3 v3.18.0
 	github.com/flipped-aurora/ws v1.0.2
@@ -134,7 +135,6 @@ require (
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/datatypes v1.2.0 // indirect
 	gorm.io/plugin/dbresolver v1.4.1 // indirect
 	modernc.org/libc v1.24.1 // indirect
 	modernc.org/mathutil v1.5.0 // indirect
