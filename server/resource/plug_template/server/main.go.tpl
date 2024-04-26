@@ -1,13 +1,13 @@
 package {{ .Snake}}
 
 import (
-	gvaGlobal "github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
+	gvaGlobal "github.com/dcncy/gin-vue-admin/server/global"
+	"github.com/dcncy/gin-vue-admin/server/model/system"
+	"github.com/dcncy/gin-vue-admin/server/plugin/plugin-tool/utils"
 {{- if .HasGlobal }}
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Snake}}/global"
+	"github.com/dcncy/gin-vue-admin/server/plugin/{{ .Snake}}/global"
 {{- end }}
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Snake}}/router"
+	"github.com/dcncy/gin-vue-admin/server/plugin/{{ .Snake}}/router"
 	"github.com/gin-gonic/gin"
 )
 

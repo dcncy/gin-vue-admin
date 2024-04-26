@@ -1,13 +1,13 @@
 package spider
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	spiderModel "github.com/flipped-aurora/gin-vue-admin/server/model/dcncy/spider"
-	spiderResp "github.com/flipped-aurora/gin-vue-admin/server/model/dcncy/spider/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/dcncy"
+	"github.com/dcncy/gin-vue-admin/server/global"
+	"github.com/dcncy/gin-vue-admin/server/model/common/request"
+	"github.com/dcncy/gin-vue-admin/server/model/common/response"
+	spiderModel "github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
+	spiderResp "github.com/dcncy/gin-vue-admin/server/model/dcncy/spider/response"
+	"github.com/dcncy/gin-vue-admin/server/utils"
+	"github.com/dcncy/gin-vue-admin/server/utils/dcncy"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

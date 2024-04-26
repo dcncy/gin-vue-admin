@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/dcncy/gin-vue-admin/server/model/common/request"
 	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )

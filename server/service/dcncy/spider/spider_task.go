@@ -2,11 +2,11 @@ package spider
 
 import (
 	"errors"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/dcncy/spider"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemService "github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"github.com/dcncy/gin-vue-admin/server/global"
+	"github.com/dcncy/gin-vue-admin/server/model/common/request"
+	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
+	"github.com/dcncy/gin-vue-admin/server/model/system"
+	systemService "github.com/dcncy/gin-vue-admin/server/service/system"
 	"gorm.io/gorm"
 )
 

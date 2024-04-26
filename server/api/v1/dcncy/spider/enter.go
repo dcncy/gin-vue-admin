@@ -1,7 +1,7 @@
 package spider
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/dcncy/gin-vue-admin/server/service"
 )
 
 type ApiGroup struct {

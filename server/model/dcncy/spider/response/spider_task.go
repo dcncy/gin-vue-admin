@@ -1,7 +1,7 @@
 package response11
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/dcncy/spider"
+	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
 )
 
 type SpiderTaskInfoResponse struct {
