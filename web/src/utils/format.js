@@ -1,5 +1,6 @@
 import { formatTimeToStr } from '@/utils/date'
 import { getDict } from '@/utils/dictionary'
+import { ref } from 'vue'
 
 export const formatBoolean = (bool) => {
   if (bool !== null) {
@@ -52,13 +53,21 @@ export const onDownloadFile = (url) => {
   window.open(path + url)
 }
 
+export const spiderTaskStatus = ref([
+  { name: '未开始', value: '0' },
+  { name: '处理中', value: '1' },
+  { name: '处理完成', value: '2' },
+  { name: '处理失败', value: '3' },
+  { name: '废弃', value: '4' },
+])
+
 export const spiderTaskStatusFormat = (status) => {
   const statusMap = {
     0: '未开始',
     1: '处理中',
     2: '处理完成',
     3: '处理失败',
-    4: '废弃'
+    4: '废弃',
   }
   return statusMap[status]
 }
@@ -68,7 +77,7 @@ export const spiderTaskStatusColorFormat = (status) => {
     1: 'primary',
     2: 'success',
     3: 'error',
-    4: 'info'
+    4: 'info',
   }
   return colorMap[status]
 }

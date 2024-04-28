@@ -92,12 +92,12 @@ func (service *SpiderTaskService) FindSpiderTaskById(id uint) (spiderTask spider
 }
 
 //@author: [dcncy]
-//@function: UpdateTaskStatus
-//@description: 更新爬虫任务状态
+//@function: UpdateSpiderTask
+//@description: 更新爬虫任务
 //@param: ID uint, status int8
 //@return: err error
 
-func (service *SpiderTaskService) UpdateTaskStatus(ID uint, status int8) (err error) {
-	err = global.GVA_DB.Model(&spider.SpiderTaskInfo{}).Where("id = ?", ID).Update("status", status).Error
+func (service *SpiderTaskService) UpdateSpiderTask(taskInfo spider.SpiderTaskInfo) (err error) {
+	err = global.GVA_DB.Save(taskInfo).Error
 	return err
 }

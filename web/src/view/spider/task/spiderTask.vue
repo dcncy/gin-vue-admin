@@ -5,7 +5,7 @@
         <el-button
             type="primary"
             icon="plus"
-            @click="addUser"
+            @click="addSpiderTask"
         >新增爬虫任务
         </el-button>
       </div>
@@ -84,16 +84,16 @@
             <el-button
                 type="primary"
                 link
-                icon="delete"
-                @click="deleteSpiderTaskFunc(scope.row)"
-            >删除
+                icon="edit"
+                @click="openEdit(scope.row)"
+            >编辑
             </el-button>
             <el-button
                 type="primary"
                 link
-                icon="edit"
-                @click="openEdit(scope.row)"
-            >编辑
+                icon="delete"
+                @click="deleteSpiderTaskFunc(scope.row)"
+            >删除
             </el-button>
           </template>
         </el-table-column>
@@ -113,19 +113,19 @@
     </div>
     <el-drawer
         v-model="addUserDialog"
-        size="60%"
+        size="50%"
         :show-close="false"
         :close-on-press-escape="false"
         :close-on-click-modal="false"
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">用户</span>
+          <span class="text-lg">爬虫任务</span>
           <div>
             <el-button @click="closeAddUserDialog">取 消</el-button>
             <el-button
                 type="primary"
-                @click="enterAddUserDialog"
+                @click="enterAddSpiderTaskDialog"
             >确 定
             </el-button>
           </div>
@@ -135,92 +135,50 @@
       <el-form
           ref="userForm"
           :rules="rules"
-          :model="userInfo"
-          label-width="80px"
+          :model="spiderTask"
+          label-width="150px"
       >
         <el-form-item
-            v-if="dialogFlag === 'add'"
-            label="用户名"
-            prop="userName"
+            label="任务名称"
+            prop="taskName"
         >
-          <el-input v-model="userInfo.userName"/>
+          <el-input v-model="spiderTask.taskName"/>
         </el-form-item>
         <el-form-item
-            v-if="dialogFlag === 'add'"
-            label="密码"
-            prop="password"
+            label="任务链接前缀"
+            prop="taskUrlPrefix"
         >
-          <el-input v-model="userInfo.password"/>
+          <el-input v-model="spiderTask.taskUrlPrefix"/>
         </el-form-item>
         <el-form-item
-            label="昵称"
-            prop="nickName"
+            label="任务链接后缀"
+            prop="taskUrlSuffix"
         >
-          <el-input v-model="userInfo.nickName"/>
+          <el-input v-model="spiderTask.taskUrlSuffix"/>
         </el-form-item>
         <el-form-item
-            label="手机号"
-            prop="phone"
+            label="总页数"
+            prop="pageNum"
         >
-          <el-input v-model="userInfo.phone"/>
+          <el-input v-model="spiderTask.pageNum"/>
         </el-form-item>
         <el-form-item
-            label="邮箱"
-            prop="email"
+            label="状态"
+            prop="status"
         >
-          <el-input v-model="userInfo.email"/>
-        </el-form-item>
-        <el-form-item
-            label="用户角色"
-            prop="authorityId"
-        >
-          <el-cascader
-              v-model="userInfo.authorityIds"
-              style="width:100%"
-              :options="authOptions"
-              :show-all-levels="false"
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false"
-          />
-        </el-form-item>
-        <el-form-item
-            label="启用"
-            prop="disabled"
-        >
-          <el-switch
-              v-model="userInfo.enable"
-              inline-prompt
-              :active-value="1"
-              :inactive-value="2"
-          />
-        </el-form-item>
-        <el-form-item
-            label="头像"
-            label-width="80px"
-        >
-          <div
-              style="display:inline-block"
-              @click="openHeaderChange"
+          <el-select
+              v-model="spiderTask.status"
+              clearable
+              placeholder="请选择"
           >
-            <img
-                v-if="userInfo.headerImg"
-                alt="头像"
-                class="header-img-box"
-                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg"
-            >
-            <div
-                v-else
-                class="header-img-box"
-            >从媒体库选择
-            </div>
-            <ChooseImg
-                ref="chooseImg"
-                :target="userInfo"
-                :target-key="`headerImg`"
+            <el-option
+                v-for="item in spiderTaskStatus"
+                :key="item.value"
+                :label="`${item.name}【${item.value}】`"
+                :value="item.value"
             />
-          </div>
+          </el-select>
         </el-form-item>
-
       </el-form>
     </el-drawer>
   </div>
@@ -244,7 +202,7 @@ import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { formatDate, spiderTaskStatusFormat, spiderTaskStatusColorFormat } from '@/utils/format'
+import { formatDate, spiderTaskStatusFormat, spiderTaskStatusColorFormat, spiderTaskStatus } from '@/utils/format'
 
 defineOptions({
   name: 'User',
@@ -302,12 +260,6 @@ const getTableData = async() => {
 // watch(() => tableData.value, () => {
 //   setAuthorityIds()
 // })
-
-// const initPage = async() => {
-//   getTableData()
-//   const res = await getAuthorityList({ page: 1, pageSize: 999 })
-//   setOptions(res.data.list)
-// }
 
 getTableData()
 
@@ -371,85 +323,87 @@ const deleteSpiderTaskFunc = async(row) => {
 }
 
 // 弹窗相关
-const userInfo = ref({
-  username: '',
-  password: '',
-  nickName: '',
-  headerImg: '',
-  authorityId: '',
-  authorityIds: [],
-  enable: 1,
+const spiderTask = ref({
+  taskName: '',
+  taskUrlPrefix: '',
+  taskUrlSuffix: '',
+  pageNum: '',
+  status: '0',
 })
 
 const rules = ref({
-  userName: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
+  taskName: [
+    { required: true, message: '请输入爬虫名称', trigger: 'blur' },
     { min: 5, message: '最低5位字符', trigger: 'blur' },
+    { max: 255, message: '最大255位字符', trigger: 'blur' },
   ],
-  password: [
-    { required: true, message: '请输入用户密码', trigger: 'blur' },
-    { min: 6, message: '最低6位字符', trigger: 'blur' },
+  taskUrlPrefix: [
+    { required: true, message: '请输入任务链接前缀', trigger: 'blur' },
+    { min: 5, message: '最低5位字符', trigger: 'blur' },
+    { max: 255, message: '最大255位字符', trigger: 'blur' },
   ],
-  nickName: [
-    { required: true, message: '请输入用户昵称', trigger: 'blur' },
+  taskUrlSuffix: [
+    { required: true, message: '请输入任务链接后缀', trigger: 'blur' },
+    { min: 5, message: '最低5位字符', trigger: 'blur' },
+    { max: 255, message: '最大255位字符', trigger: 'blur' },
   ],
-  phone: [
+  pageNum: [
+    { required: true, message: '请输入总页数', trigger: 'blur' },
     {
-      pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/,
-      message: '请输入合法手机号',
+      pattern: /^([1-9][0-9]{0,5}|1000000)$/,
+      message: '请输入非0正整数，且小于100万',
       trigger: 'blur',
     },
   ],
-  email: [
-    {
-      pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,
-      message: '请输入正确的邮箱',
-      trigger: 'blur',
-    },
-  ],
-  authorityId: [
-    { required: true, message: '请选择用户角色', trigger: 'blur' },
+  status: [
+    { required: true, message: '请选择状态值', trigger: 'blur' },
   ],
 })
+
 const userForm = ref(null)
-// const enterAddUserDialog = async() => {
-//   userInfo.value.authorityId = userInfo.value.authorityIds[0]
-//   userForm.value.validate(async valid => {
-//     if (valid) {
-//       const req = {
-//         ...userInfo.value
-//       }
-//       if (dialogFlag.value === 'add') {
-//         const res = await register(req)
-//         if (res.code === 0) {
-//           ElMessage({ type: 'success', message: '创建成功' })
-//           await getTableData()
-//           closeAddUserDialog()
-//         }
-//       }
-//       if (dialogFlag.value === 'edit') {
-//         const res = await setUserInfo(req)
-//         if (res.code === 0) {
-//           ElMessage({ type: 'success', message: '编辑成功' })
-//           await getTableData()
-//           closeAddUserDialog()
-//         }
-//       }
-//     }
-//   })
-// }
+// 确认新增爬虫任务
+const enterAddSpiderTaskDialog = async() => {
+  userForm.value.validate(async valid => {
+    if (valid) {
+      const req = {
+        ...spiderTask.value,
+      }
+      if (dialogFlag.value === 'add') {
+        const res = await createSpiderTask(req)
+        if (res.code === 0) {
+          ElMessage({ type: 'success', message: '创建成功' })
+          await getTableData()
+          closeAddUserDialog()
+        }
+      }
+      if (dialogFlag.value === 'edit') {
+        const res = await updateSpiderTaskStatus(req)
+        if (res.code === 0) {
+          ElMessage({ type: 'success', message: '更新成功' })
+          await getTableData()
+          closeAddUserDialog()
+        }
+      }
+    }
+  })
+}
 
 const addUserDialog = ref(false)
 const closeAddUserDialog = () => {
   userForm.value.resetFields()
-  userInfo.value.headerImg = ''
-  userInfo.value.authorityIds = []
+  spiderTask.value = {
+    taskName: '',
+    taskUrlPrefix: '',
+    taskUrlSuffix: '',
+    pageNum: '',
+    status: '0',
+  }
   addUserDialog.value = false
 }
 
 const dialogFlag = ref('add')
 
-const addUser = () => {
+const addSpiderTask = () => {
   dialogFlag.value = 'add'
   addUserDialog.value = true
 }
@@ -481,22 +435,22 @@ const addUser = () => {
 
 const openEdit = (row) => {
   dialogFlag.value = 'edit'
-  userInfo.value = JSON.parse(JSON.stringify(row))
+  spiderTask.value = JSON.parse(JSON.stringify(row))
   addUserDialog.value = true
 }
 
 const switchEnable = async(row) => {
-  userInfo.value = JSON.parse(JSON.stringify(row))
+  spiderTask.value = JSON.parse(JSON.stringify(row))
   await nextTick()
   const req = {
-    ...userInfo.value,
+    ...spiderTask.value,
   }
   const res = await setUserInfo(req)
   if (res.code === 0) {
     ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
     await getTableData()
-    userInfo.value.headerImg = ''
-    userInfo.value.authorityIds = []
+    spiderTask.value.headerImg = ''
+    spiderTask.value.authorityIds = []
   }
 }
 

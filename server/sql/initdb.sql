@@ -80,12 +80,12 @@ CREATE TABLE IF NOT EXISTS e_community_address
 
 CREATE TABLE IF NOT EXISTS spider_task_info
 (
-    id               INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
-    task_name        VARCHAR(255) UNIQUE COMMENT '爬虫任务名称',
+    id              INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    task_name       VARCHAR(255) UNIQUE COMMENT '爬虫任务名称',
     task_url_prefix VARCHAR(255) COMMENT '任务链接前缀',
     task_url_suffix VARCHAR(255) COMMENT '任务链接后缀',
-    page_num         INT COMMENT '页数',
-    status           INT COMMENT '处理状态: 0-未开始, 1-处理中, 2-处理完成, 3-处理失败, 4-废弃',
-    start_time       DATETIME COMMENT '开始时间',
-    end_time         DATETIME COMMENT '完成时间'
+    page_num        INT COMMENT '页数',
+    status          INT COMMENT '处理状态: 0-未开始, 1-处理中, 2-处理完成, 3-处理失败, 4-废弃',
+    start_time      DATETIME COMMENT '开始时间',
+    end_time        DATETIME COMMENT '完成时间'
 ) COMMENT = '爬虫任务表';

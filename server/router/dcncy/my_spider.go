@@ -13,7 +13,7 @@ func (s *SpiderRouter) InitSpiderRouter(Router *gin.RouterGroup) {
 	{
 		customerRouter.POST("task", spiderTaskApi.CreateSpiderTask)          // 创建爬虫任务
 		customerRouter.DELETE("task", spiderTaskApi.DeleteSpiderTask)        // 删除爬虫任务
-		customerRouter.PUT("taskStatus", spiderTaskApi.UpdateTaskStatus)     // 更新爬虫任务状态
+		customerRouter.PUT("task", spiderTaskApi.UpdateSpiderTask)           // 更新爬虫任务
 		customerRouter.POST("taskById", spiderTaskApi.FindSpiderTaskById)    // 根据Id获取爬虫任务
 		customerRouter.POST("taskList", spiderTaskApi.GetSpiderTaskInfoList) // 获取爬虫任务列表
 	}

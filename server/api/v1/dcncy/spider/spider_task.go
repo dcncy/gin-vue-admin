@@ -7,7 +7,6 @@ import (
 	spiderModel "github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
 	spiderResp "github.com/dcncy/gin-vue-admin/server/model/dcncy/spider/response"
 	"github.com/dcncy/gin-vue-admin/server/utils"
-	"github.com/dcncy/gin-vue-admin/server/utils/dcncy"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -60,8 +59,6 @@ func (e *SpiderTaskApi) CreateSpiderTask(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	// 设置雪花算法主键
-	task.ID = uint(dcncy.GetSnowFlakeId())
 	// 存储数据
 	_, err = spiderTaskService.CreateTask(task)
 	if err != nil {
@@ -98,27 +95,22 @@ func (e *SpiderTaskApi) DeleteSpiderTask(c *gin.Context) {
 }
 
 //@author: [dcncy]
-//@function: UpdateTaskStatus
-//@description: 更新爬虫任务状态
+//@function: UpdateSpiderTask
+//@description: 更新爬虫任务
 
-func (e *SpiderTaskApi) UpdateTaskStatus(c *gin.Context) {
+func (e *SpiderTaskApi) UpdateSpiderTask(c *gin.Context) {
 	var taskInfo spiderModel.SpiderTaskInfo
 	err := c.ShouldBindJSON(&taskInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(taskInfo.ID, utils.IdVerify)
+	err = utils.Verify(taskInfo, utils.SpiderTaskVerify)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(taskInfo, utils.SpiderTaskStatusVerify)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	err = spiderTaskService.UpdateTaskStatus(taskInfo.ID, taskInfo.Status)
+	err = spiderTaskService.UpdateSpiderTask(taskInfo)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)

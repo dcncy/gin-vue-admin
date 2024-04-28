@@ -39,11 +39,11 @@ export const getSpiderTaskInfo = () => {
   })
 }
 
-// @Summary 更新爬虫任务状态
+// @Summary 更新爬虫任务
 // @Router /spider/taskStatus [get]
 export const updateSpiderTaskStatus = (data) => {
   return service({
-    url: '/spider/taskStatus',
+    url: '/spider/task',
     method: 'put',
     data: data
   })
