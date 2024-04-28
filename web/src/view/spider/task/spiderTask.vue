@@ -22,30 +22,24 @@
         <el-table-column
             align="left"
             label="任务名称"
-            min-width="200"
+            min-width="180"
             prop="taskName"
         />
         <el-table-column
             align="left"
             label="任务链接前缀"
-            min-width="200"
+            min-width="350"
             prop="taskUrlPrefix"
         />
         <el-table-column
             align="left"
             label="任务链接后缀"
-            min-width="150"
+            min-width="200"
             prop="taskUrlSuffix"
         />
         <el-table-column
             align="center"
-            label="房源数"
-            min-width="100"
-            prop="totalCount"
-        />
-        <el-table-column
-            align="center"
-            label="页数"
+            label="总页数"
             min-width="80"
             prop="pageNum"
         >
@@ -67,7 +61,7 @@
         <el-table-column
             align="center"
             label="开始时间"
-            min-width="150"
+            min-width="200"
             prop="startTime"
         >
           <template #default="scope">{{ formatDate(scope.row.startTime) }}</template>
@@ -75,7 +69,7 @@
         <el-table-column
             align="center"
             label="完成时间"
-            min-width="150"
+            min-width="200"
             prop="endTime"
         >
           <template #default="scope">{{ formatDate(scope.row.endTime) }}</template>
@@ -83,7 +77,7 @@
         <el-table-column
             align="center"
             label="操作"
-            min-width="250"
+            min-width="150"
             fixed="right"
         >
           <template #default="scope">
