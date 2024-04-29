@@ -80,7 +80,7 @@ func (e *SpiderTaskApi) DeleteSpiderTask(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(taskInfo.ID, utils.IdVerify)
+	err = utils.Verify(taskInfo, utils.IdVerify)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
