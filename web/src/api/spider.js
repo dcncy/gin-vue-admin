@@ -83,6 +83,6 @@ export const startSpiderTask = (data) => {
   return service({
     url: '/spider/start',
     method: 'post',
-    data: data,
+    data,
   })
 }

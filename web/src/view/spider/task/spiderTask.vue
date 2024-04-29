@@ -339,7 +339,7 @@ const openEdit = (row) => {
 }
 
 const tagClicked = (row) => {
-  let item = JSON.parse(JSON.stringify(row))
+  const item = JSON.parse(JSON.stringify(row))
   if (item.status === '0') {
     ElMessageBox.confirm('确定要开始执行这个任务吗?', '提示', {
       confirmButtonText: '确定',

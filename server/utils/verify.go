@@ -17,5 +17,4 @@ var (
 	ChangePasswordVerify   = Rules{"Password": {NotEmpty()}, "NewPassword": {NotEmpty()}}
 	SetUserAuthorityVerify = Rules{"AuthorityId": {NotEmpty()}}
 	SpiderTaskVerify       = Rules{"TaskName": {NotEmpty()}, "TaskUrlPrefix": {NotEmpty()}, "TaskUrlSuffix": {NotEmpty()}, "PageNum": {NotEmpty()}}
-	SpiderTaskStatusVerify = Rules{"Status": {NotEmpty()}}
 )

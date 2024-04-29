@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	Unprocessed int8 = iota
+	Unprocessed int = iota
 	Processing
 	Completed
 	Failed

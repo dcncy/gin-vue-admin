@@ -19,5 +19,7 @@ func (s *SpiderRouter) InitSpiderRouter(Router *gin.RouterGroup) {
 
 		customerRouter.POST("updateConfig", spiderTaskApi.UpdateSpiderConfig) // 更新爬虫相关配置
 		customerRouter.POST("getConfig", spiderTaskApi.GetSpiderConfig)       // 获取爬虫相关配置
+
+		customerRouter.POST("start", spiderTaskApi.StartSpiderTask) // 启动爬虫任务
 	}
 }

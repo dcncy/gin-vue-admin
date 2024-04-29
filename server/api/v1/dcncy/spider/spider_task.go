@@ -10,6 +10,8 @@ import (
 	"github.com/dcncy/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strconv"
+	"time"
 )
 
 type SpiderTaskApi struct{}
@@ -177,4 +179,66 @@ func (s *SpiderTaskApi) GetSpiderConfig(c *gin.Context) {
 		return
 	}
 	response.OkWithDetailed(spiderResp.SpiderConfigResponse{Spider: conf}, "获取成功", c)
+}
+
+//@author: [dcncy]
+//@function: StartSpiderTask
+//@description: 执行爬虫任务
+
+func (s *SpiderTaskApi) StartSpiderTask(c *gin.Context) {
+	var taskInfo spiderModel.SpiderTaskInfo
+	err := c.ShouldBindJSON(&taskInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(taskInfo, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	taskInfo, err = spiderTaskService.FindSpiderTaskById(taskInfo.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	// 启动爬虫任务
+	go startSpider(c, taskInfo)
+	response.OkWithMessage("启动成功", c)
+}
+
+// 开始抓取
+func startSpider(c *gin.Context, task spiderModel.SpiderTaskInfo) {
+	// 开始爬取，更新状态
+	now := time.Now()
+	task.StartTime = &now
+	task.EndTime = task.StartTime
+	task.Status = strconv.Itoa(spiderModel.Processing)
+
+	err := spiderTaskService.UpdateSpiderTask(task)
+	if err != nil {
+		global.GVA_LOG.Error("更新爬虫任务状态失败!", zap.Error(err))
+		response.FailWithMessage("更新爬虫任务状态失败", c)
+		return
+	}
+	// 启动爬虫任务
+	err = spiderTaskService.StartSpiderTask(&task)
+	if err != nil {
+		global.GVA_LOG.Error("任务执行失败!", zap.Error(err))
+		response.FailWithMessage("任务执行失败", c)
+		// 更新爬虫任务为失败
+		task.Status = strconv.Itoa(spiderModel.Failed)
+	} else {
+		task.Status = strconv.Itoa(spiderModel.Completed)
+	}
+	// 完成爬取，更新状态
+	now = time.Now()
+	task.EndTime = &now
+	err = spiderTaskService.UpdateSpiderTask(task)
+	if err != nil {
+		global.GVA_LOG.Error("更新爬虫任务状态失败!", zap.Error(err))
+		response.FailWithMessage("更新爬虫任务状态失败", c)
+		return
+	}
 }
