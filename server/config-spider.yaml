@@ -1,0 +1,8 @@
+spider:
+  sleepSecond: 2ns
+  header:
+    cookie: lianjia_uuid=4a01961c-df58-4747-a892-e7563106b195; crosSdkDT2019DeviceId=scos85-fyq45g-qmm0v0jpurp3w7d-rx9c6muzq; lfrc_=c1131324-1cc4-4ee3-9270-a0d828bb1826; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2218e4112e91079b-027b5af84ed678-1d525637-2104200-18e4112e9111b6c%22%2C%22%24device_id%22%3A%2218e4112e91079b-027b5af84ed678-1d525637-2104200-18e4112e9111b6c%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22%22%2C%22%24latest_referrer_host%22%3A%22%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%7D%7D; select_city=131000; lianjia_ssid=d41294ad-8086-4808-84f2-60cf6a1c493b; login_ucid=2000000416464309; lianjia_token=2.0015df38754496e82c047211444249fb4c; lianjia_token_secure=2.0015df38754496e82c047211444249fb4c; security_ticket=bOBq5rBdjAMgN/E162vcKTye8nQJ8ybSECKo14cqveFdDhwoXf2ZGFvFsSfwiVYJjG6/gDTROpAnzuGVLL2wVqYTLCYGU54q3EoyRb1glTUb+T4CYR23hlYsP/SCYg9IlBak5D0+m0I272vKTyGz4NkL553KDELGszcYTMcVwGQ=; ftkrc_=4b26e1d8-a4b9-4a5d-b650-fff1dca571df
+    agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36
+  picPath:
+    cover: /Users/dcncy/Downloads/Spider/Pics/cover
+    layout: /Users/dcncy/Downloads/Spider/Pics/layout

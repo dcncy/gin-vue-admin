@@ -32,6 +32,9 @@ var (
 
 	BlackCache local_cache.Cache
 	lock       sync.RWMutex
+
+	SPIDER_VP     *viper.Viper
+	SPIDER_CONFIG config.SpiderConfig
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

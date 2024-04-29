@@ -1,6 +1,7 @@
 package spider
 
 import (
+	"github.com/dcncy/gin-vue-admin/server/config"
 	"github.com/dcncy/gin-vue-admin/server/global"
 	"github.com/dcncy/gin-vue-admin/server/model/common/request"
 	"github.com/dcncy/gin-vue-admin/server/model/common/response"
@@ -142,4 +143,38 @@ func (e *SpiderTaskApi) FindSpiderTaskById(c *gin.Context) {
 		return
 	}
 	response.OkWithDetailed(spiderResp.SpiderTaskInfoResponse{SpiderTaskInfo: data}, "获取成功", c)
+}
+
+//@author: [dcncy]
+//@function: UpdateSpiderConfig
+//@description: 更新爬虫相关配置
+
+func (s *SpiderTaskApi) UpdateSpiderConfig(c *gin.Context) {
+	var conf config.SpiderConfig
+	err := c.ShouldBindJSON(&conf)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = spiderTaskService.UpdateSpiderConfig(conf)
+	if err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
+//@author: [dcncy]
+//@function: UpdateSpiderConfig
+//@description: 获取爬虫相关配置
+
+func (s *SpiderTaskApi) GetSpiderConfig(c *gin.Context) {
+	conf, err := spiderTaskService.GetSpiderConfig()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(spiderResp.SpiderConfigResponse{Spider: conf}, "获取成功", c)
 }

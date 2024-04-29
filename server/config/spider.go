@@ -2,6 +2,9 @@ package config
 
 import "time"
 
+type SpiderConfig struct {
+	Spider Spider `mapstructure:"spider" json:"spider" yaml:"spider"`
+}
 type Spider struct {
 	SleepSecond   time.Duration `mapstructure:"sleepSecond" json:"sleepSecond" yaml:"sleepSecond"` // 爬虫间隔休眠时间（秒）
 	SpiderHeader  SpiderHeader  `mapstructure:"header" json:"header" yaml:"header"`                // 爬虫请求头

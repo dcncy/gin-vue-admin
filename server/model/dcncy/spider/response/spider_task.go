@@ -1,4 +1,4 @@
-package response11
+package response
 
 import (
 	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"

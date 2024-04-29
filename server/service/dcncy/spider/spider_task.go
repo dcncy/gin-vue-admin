@@ -2,11 +2,13 @@ package spider
 
 import (
 	"errors"
+	"github.com/dcncy/gin-vue-admin/server/config"
 	"github.com/dcncy/gin-vue-admin/server/global"
 	"github.com/dcncy/gin-vue-admin/server/model/common/request"
 	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
 	"github.com/dcncy/gin-vue-admin/server/model/system"
 	systemService "github.com/dcncy/gin-vue-admin/server/service/system"
+	"github.com/dcncy/gin-vue-admin/server/utils"
 	"gorm.io/gorm"
 )
 
@@ -100,4 +102,25 @@ func (service *SpiderTaskService) FindSpiderTaskById(id uint) (spiderTask spider
 func (service *SpiderTaskService) UpdateSpiderTask(taskInfo spider.SpiderTaskInfo) (err error) {
 	err = global.GVA_DB.Save(taskInfo).Error
 	return err
+}
+
+//@author: [dcncy]
+//@function: UpdateSpiderConfig
+//@description: 更新爬虫相关配置
+
+func (service *SpiderTaskService) UpdateSpiderConfig(conf config.SpiderConfig) (err error) {
+	cs := utils.StructToMap(conf)
+	for k, v := range cs {
+		global.SPIDER_VP.Set(k, v)
+	}
+	err = global.SPIDER_VP.WriteConfig()
+	return err
+}
+
+//@author: [dcncy]
+//@function: UpdateSpiderConfig
+//@description: 获取爬虫相关配置
+
+func (service *SpiderTaskService) GetSpiderConfig() (conf config.Spider, err error) {
+	return global.SPIDER_CONFIG.Spider, nil
 }
