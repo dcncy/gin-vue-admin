@@ -11,7 +11,7 @@ export const createSpiderTask = (data) => {
 }
 
 // @Summary 分页获取爬虫任务列表
-// @Router /spider/taskList [get]
+// @Router /spider/taskList [post]
 export const getSpiderTaskList = (data) => {
   return service({
     url: '/spider/taskList',
@@ -31,7 +31,7 @@ export const deleteSpiderTask = (data) => {
 }
 
 // @Summary 获取爬虫任务信息
-// @Router /spider/taskById [get]
+// @Router /spider/taskById [post]
 export const getSpiderTaskInfo = () => {
   return service({
     url: '/spider/taskById',
@@ -40,7 +40,7 @@ export const getSpiderTaskInfo = () => {
 }
 
 // @Summary 更新爬虫任务
-// @Router /spider/taskStatus [get]
+// @Router /spider/taskStatus [put]
 export const updateSpiderTaskStatus = (data) => {
   return service({
     url: '/spider/task',
@@ -74,5 +74,15 @@ export const getSpiderConfig = () => {
   return service({
     url: '/spider/getConfig',
     method: 'post'
+  })
+}
+
+// @Summary 启动爬虫任务
+// @Router /spider/start [post]
+export const startSpiderTask = (data) => {
+  return service({
+    url: '/spider/start',
+    method: 'post',
+    data: data,
   })
 }

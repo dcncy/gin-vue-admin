@@ -52,7 +52,10 @@
         >
           <template #default="scope">
             <div>
-              <el-tag :type="spiderTaskStatusColorFormat(scope.row.status)">
+              <el-tag :type="spiderTaskStatusColorFormat(scope.row.status)"
+                      class="clickable-tag"
+                      @click="tagClicked(scope.row)"
+              >
                 {{ spiderTaskStatusFormat(scope.row.status) }}
               </el-tag>
             </div>
@@ -190,7 +193,7 @@ import {
   createSpiderTask,
   getSpiderTaskList,
   deleteSpiderTask,
-  updateSpiderTaskStatus,
+  updateSpiderTaskStatus, startSpiderTask,
 } from '@/api/spider'
 
 import { ref } from 'vue'
@@ -335,10 +338,30 @@ const openEdit = (row) => {
   addUserDialog.value = true
 }
 
+const tagClicked = (row) => {
+  let item = JSON.parse(JSON.stringify(row))
+  if (item.status === '0') {
+    ElMessageBox.confirm('确定要开始执行这个任务吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(async() => {
+      const res = await startSpiderTask({ id: row.id })
+      if (res.code === 0) {
+        ElMessage.success('启动任务成功')
+        await getTableData()
+      }
+    })
+  }
+}
 </script>
 
 <style lang="scss">
 .header-img-box {
   @apply w-52 h-52 border border-solid border-gray-300 rounded-xl flex justify-center items-center cursor-pointer;
+}
+
+.clickable-tag {
+  cursor: pointer;
 }
 </style>
