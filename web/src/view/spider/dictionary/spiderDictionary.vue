@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dict-box flex gap-4">
-      <div class="w-44 bg-white p-4">
+      <div class="w-64 bg-white p-4">
         <div class="flex justify-between items-center">
           <span class="text font-bold">字典类型</span>
         </div>
