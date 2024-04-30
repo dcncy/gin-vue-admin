@@ -34,15 +34,7 @@ func (service *SpiderTaskService) StartSpiderTask(task *spider.SpiderTaskInfo) e
 // 创建爬虫对象
 func spiderList(url string) error {
 	// 创建 Collector 对象
-	collector := colly.NewCollector(
-		colly.AllowedDomains("lf.ke.com", ".ke.com", ".ljcdn.com"), //白名单域名
-		colly.UserAgent(global.SPIDER_CONFIG.Spider.SpiderHeader.Agent),
-		//colly.AllowURLRevisit(),                      //允许对同一 URL 进行多次下载
-		//colly.Async(true),                            //设置为异步请求
-		//colly.MaxDepth(3),                            //爬取页面深度,最多为两层
-		//colly.MaxBodySize(1024*1024*1024),            //响应正文最大字节数
-		//colly.IgnoreRobotsTxt(), //忽略目标机器中的`robots.txt`声明
-	)
+	collector := CreateColly()
 	// 在请求之前调用
 	collector.OnRequest(func(request *colly.Request) {
 		// 添加请求头
@@ -77,7 +69,6 @@ func saveInfo(el *colly.HTMLElement) {
 	HouseDetailUrl := dcncy.TrimSpace(el.ChildAttr("a", "href"))
 	// 贝壳主键ID
 	IdBeike := dcncy.GetBeikeId(HouseDetailUrl)
-	global.GVA_LOG.Info("------开始执行子爬虫------", zap.String("HouseDetailUrl", HouseDetailUrl))
 
 	// 成交日期
 	TradeDateStr := dcncy.TrimSpace(el.ChildText("div[class='info'] > div[class='address'] > div[class='dealDate']"))
@@ -86,14 +77,16 @@ func saveInfo(el *colly.HTMLElement) {
 	exists, err := checkExists(existsKey)
 	if err != nil {
 		global.GVA_LOG.Error("检查Redis是否缓存时出现异常!", zap.String("existsKey", existsKey), zap.Error(err))
-		return
 	}
 	// 如果没有抓取过，则才爬取
 	if !exists {
 		// 开启子协程
 		go spiderHouseInfo(HouseDetailUrl, id)
 		// 抓取列表数据
-		parseHouseInfo(el, &aHouseOverview, id, IdBeike)
+		err := parseHouseInfo(el, &aHouseOverview, id, IdBeike)
+		if err != nil {
+			global.GVA_LOG.Error("爬取列表数据出现异常!", zap.String("IdBeike", IdBeike), zap.Error(err))
+		}
 	} else {
 		global.GVA_LOG.Info("该房源信息已经抓取过，本次不获取信息。", zap.String("IdBeike", IdBeike), zap.String("TradeDate", TradeDateStr))
 	}
@@ -104,7 +97,7 @@ func saveInfo(el *colly.HTMLElement) {
 func parseHouseInfo(el *colly.HTMLElement, aHouseOverview *house.A_HouseOverview, id int, IdBeike string) error {
 	// 户型图
 	HouseLayoutSrc := dcncy.TrimSpace(el.ChildAttr("a > img[class='lj-lazy']", "data-original"))
-	picPath, _ := dcncy.DownloadPic(HouseLayoutSrc, id)
+	picPath, _ := dcncy.DownloadCoverPic(HouseLayoutSrc, id)
 	// 房屋描述
 	HouseTitle := dcncy.TrimSpace(el.ChildText("div[class='info'] > div[class='title'] > a"))
 	// 朝向
@@ -179,4 +172,18 @@ func checkExists(idBeike string) (bool, error) {
 		}
 	}
 	return resultFlag, nil
+}
+
+// 创建抓取工具
+func CreateColly() colly.Collector {
+	collector := colly.NewCollector(
+		colly.AllowedDomains("lf.ke.com", ".ke.com", ".ljcdn.com", "ke-image.ljcdn.com"), //白名单域名
+		colly.UserAgent(global.SPIDER_CONFIG.Spider.SpiderHeader.Agent),
+		//colly.AllowURLRevisit(), 						//允许对同一 URL 进行多次下载
+		//colly.Async(true),                            //设置为异步请求
+		//colly.MaxDepth(3),                            //爬取页面深度,最多为两层
+		//colly.MaxBodySize(1024*1024*1024),            //响应正文最大字节数
+		//colly.IgnoreRobotsTxt(), 						//忽略目标机器中的`robots.txt`声明
+	)
+	return *collector
 }

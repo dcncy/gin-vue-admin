@@ -14,8 +14,16 @@ import (
 	"time"
 )
 
-func DownloadPic(imageURL string, id int) (string, error) {
-	PicPath := global.SPIDER_CONFIG.Spider.SpiderPicPath.Cover
+func DownloadCoverPic(imageURL string, id int) (string, error) {
+	picPath := global.SPIDER_CONFIG.Spider.SpiderPicPath.Cover
+	return downloadPic(picPath, imageURL, id)
+}
+func DownloadLayoutPic(imageURL string, id int) (string, error) {
+	picPath := global.SPIDER_CONFIG.Spider.SpiderPicPath.Layout
+	return downloadPic(picPath, imageURL, id)
+}
+
+func downloadPic(picPathPrefix string, imageURL string, id int) (string, error) {
 	// 使用filepath.Ext()函数获取文件后缀名
 	fileExtTemp := strings.Split(imageURL, "?")[0]
 	fileExt := filepath.Ext(fileExtTemp)
@@ -26,7 +34,7 @@ func DownloadPic(imageURL string, id int) (string, error) {
 	randomNumber := rand.Intn(100) + 1
 	// 格式化输出，确保输出为三位数（不足三位则补零）
 	randomNumberString := fmt.Sprintf("%03d", randomNumber)
-	downloadPath := PicPath + "/" + strconv.Itoa(id) + "_" + randomNumberString + fileExt
+	downloadPath := picPathPrefix + "/" + strconv.Itoa(id) + "_" + randomNumberString + fileExt
 	// 发起HTTP GET请求获取图片数据
 	response, err := http.Get(imageURL)
 	if err != nil {
@@ -35,9 +43,9 @@ func DownloadPic(imageURL string, id int) (string, error) {
 	}
 	defer response.Body.Close()
 	// 创建要保存的目录
-	err = os.MkdirAll(filepath.Dir(PicPath), os.ModePerm)
+	err = os.MkdirAll(filepath.Dir(picPathPrefix), os.ModePerm)
 	if err != nil {
-		global.GVA_LOG.Error("无法创建目录!", zap.String("PicPath", PicPath), zap.Error(err))
+		global.GVA_LOG.Error("无法创建目录!", zap.String("picPathPrefix", picPathPrefix), zap.Error(err))
 		return "", err
 	}
 

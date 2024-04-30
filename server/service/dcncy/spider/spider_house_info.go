@@ -13,12 +13,8 @@ import (
 
 func spiderHouseInfo(url string, id int) {
 	global.GVA_LOG.Info("=============>>>开始子爬虫抓取网页：", zap.String("url", url))
-
 	// 创建 Collector 对象
-	collector := colly.NewCollector(
-		colly.AllowedDomains("lf.ke.com", ".ke.com", ".ljcdn.com"), //白名单域名
-		colly.UserAgent(global.SPIDER_CONFIG.Spider.SpiderHeader.Agent),
-	)
+	collector := CreateColly()
 	// 在请求之前调用
 	collector.OnRequest(func(request *colly.Request) {
 		// 添加请求头
@@ -73,9 +69,8 @@ func spiderHouseInfo(url string, id int) {
 // 存储房屋交易信息
 func save_B_HouseTradeInfo(el *colly.HTMLElement, id int, communityId int) {
 	// 户型图
-	houseLayoutSrc := dcncy.TrimSpace(el.ChildAttr("div[class='img'] > div[class='imgContainer'] > img", "src"))
-	picPath := strings.Split(houseLayoutSrc, "?")[0]
-	//picPath, _ := utils.DownloadPic(houseLayoutSrc, id) TODO
+	houseLayoutSrc := dcncy.TrimSpace(el.ChildAttr("div[class='img'] > div[class='thumbnail'] > ul > li", "data-src"))
+	picPath, _ := dcncy.DownloadLayoutPic(houseLayoutSrc, id)
 	// 成交总价
 	TotalPrice := dcncy.TrimSpace(el.ChildText("div[class='info fr'] > div[class='price'] > span[class='dealTotalPrice'] > i"))
 	totalPrice, _ := strconv.ParseFloat(TotalPrice, 64)
