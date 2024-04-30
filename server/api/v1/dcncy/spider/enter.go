@@ -6,8 +6,11 @@ import (
 
 type ApiGroup struct {
 	SpiderTaskApi
+	SpiderDictionaryApi
+	SpiderConfigApi
 }
 
 var (
-	spiderTaskService = service.ServiceGroupApp.DcncyServiceGroup.SpiderTaskService
+	spiderTaskService       = service.ServiceGroupApp.DcncyServiceGroup.SpiderTaskService
+	spiderDictionaryService = service.ServiceGroupApp.DcncyServiceGroup.SpiderDictionaryService
 )

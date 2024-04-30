@@ -6,7 +6,7 @@ export const createSpiderTask = (data) => {
   return service({
     url: '/spider/task',
     method: 'post',
-    data: data
+    data: data,
   })
 }
 
@@ -16,7 +16,7 @@ export const getSpiderTaskList = (data) => {
   return service({
     url: '/spider/taskList',
     method: 'post',
-    data: data
+    data: data,
   })
 }
 
@@ -26,7 +26,7 @@ export const deleteSpiderTask = (data) => {
   return service({
     url: '/spider/task',
     method: 'delete',
-    data: data
+    data: data,
   })
 }
 
@@ -35,7 +35,7 @@ export const deleteSpiderTask = (data) => {
 export const getSpiderTaskInfo = () => {
   return service({
     url: '/spider/taskById',
-    method: 'post'
+    method: 'post',
   })
 }
 
@@ -45,7 +45,7 @@ export const updateSpiderTaskStatus = (data) => {
   return service({
     url: '/spider/task',
     method: 'put',
-    data: data
+    data: data,
   })
 }
 
@@ -60,7 +60,7 @@ export const updateSpiderConfig = (data) => {
   return service({
     url: '/spider/updateConfig',
     method: 'post',
-    data
+    data,
   })
 }
 
@@ -73,7 +73,7 @@ export const updateSpiderConfig = (data) => {
 export const getSpiderConfig = () => {
   return service({
     url: '/spider/getConfig',
-    method: 'post'
+    method: 'post',
   })
 }
 
@@ -84,5 +84,55 @@ export const startSpiderTask = (data) => {
     url: '/spider/start',
     method: 'post',
     data,
+  })
+}
+
+// @Summary 根据字典类型获取字典项
+// @Router /spider/findDictByType [post]
+export const findDictByType = (data) => {
+  return service({
+    url: '/spider/findDictByType',
+    method: 'post',
+    data,
+  })
+}
+
+// @Summary 创建爬虫字典项
+// @Router /spider/dictionary [post]
+export const createSpiderDictionary = (data) => {
+  return service({
+    url: '/spider/dictionary',
+    method: 'post',
+    data,
+  })
+}
+
+// @Summary 更新爬虫字典项
+// @Router /spider/dictionary [put]
+export const updateSpiderDictionary = (data) => {
+  return service({
+    url: '/spider/dictionary',
+    method: 'put',
+    data,
+  })
+}
+
+// @Summary 删除爬虫字典项
+// @Router /spider/dictionary [delete]
+export const deleteSpiderDictionary = (data) => {
+  return service({
+    url: '/spider/dictionary',
+    method: 'delete',
+    data,
+  })
+}
+
+// @Summary 获取爬虫字典项
+// @Router /spider/dictionary [get]
+export const getSpiderDictionary = (params) => {
+  return service({
+    url: '/spider/dictionary',
+    method: 'get',
+    params
   })
 }

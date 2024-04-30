@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"github.com/dcncy/gin-vue-admin/server/model/dcncy/house"
+	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
 	"os"
 
 	"github.com/dcncy/gin-vue-admin/server/global"
@@ -53,6 +55,15 @@ func RegisterTables() {
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
 		example.ExaFileUploadAndDownload{},
+
+		spider.SpiderTaskInfo{},
+		spider.SpiderDictionary{},
+
+		house.A_HouseOverview{},
+		house.B_HouseTradeInfo{},
+		house.C_HouseBaseInfo{},
+		house.D_HouseHistoryTrade{},
+		house.E_CommunityAddress{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

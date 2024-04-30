@@ -6,8 +6,6 @@ import (
 	"github.com/dcncy/gin-vue-admin/server/global"
 	"github.com/dcncy/gin-vue-admin/server/model/common/request"
 	"github.com/dcncy/gin-vue-admin/server/model/dcncy/spider"
-	"github.com/dcncy/gin-vue-admin/server/model/system"
-	systemService "github.com/dcncy/gin-vue-admin/server/service/system"
 	"github.com/dcncy/gin-vue-admin/server/utils"
 	"gorm.io/gorm"
 )
@@ -39,20 +37,10 @@ func (service *SpiderTaskService) CreateTask(task spider.SpiderTaskInfo) (spider
 //@param: sysUserAuthorityID uint, info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (service *SpiderTaskService) GetSpiderTaskInfoList(sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
+func (service *SpiderTaskService) GetSpiderTaskInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&spider.SpiderTaskInfo{})
-	var a system.SysAuthority
-	a.AuthorityId = sysUserAuthorityID
-	auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(a)
-	if err != nil {
-		return
-	}
-	var dataId []uint
-	for _, v := range auth.DataAuthorityId {
-		dataId = append(dataId, v.AuthorityId)
-	}
 	var CustomerList []spider.SpiderTaskInfo
 	err = db.Count(&total).Error
 	if err != nil {
@@ -72,9 +60,6 @@ func (service *SpiderTaskService) GetSpiderTaskInfoList(sysUserAuthorityID uint,
 func (service *SpiderTaskService) DeleteSpiderTask(id uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("id = ?", id).Delete(&spider.SpiderTaskInfo{}).Error; err != nil {
-			return err
-		}
-		if err := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error; err != nil {
 			return err
 		}
 		return nil
