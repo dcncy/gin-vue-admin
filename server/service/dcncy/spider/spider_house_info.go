@@ -68,8 +68,14 @@ func spiderHouseInfo(url string, id int) {
 
 // 存储房屋交易信息
 func save_B_HouseTradeInfo(el *colly.HTMLElement, id int, communityId int) {
-	// 户型图
+	// 小户型图
 	houseLayoutSrc := dcncy.TrimSpace(el.ChildAttr("div[class='img'] > div[class='thumbnail'] > ul > li", "data-src"))
+	// 大户型图
+	bigLayoutPic, exists := el.DOM.Parent().Find("div[class='bigImg'] > div[class='slide'] > ul > li").Attr("data-src")
+	if exists {
+		houseLayoutSrc = dcncy.TrimSpace(bigLayoutPic)
+	}
+	// 下载户型图
 	picPath, _ := dcncy.DownloadLayoutPic(houseLayoutSrc, id)
 	// 成交总价
 	TotalPrice := dcncy.TrimSpace(el.ChildText("div[class='info fr'] > div[class='price'] > span[class='dealTotalPrice'] > i"))
